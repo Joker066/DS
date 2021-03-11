@@ -19,6 +19,8 @@ int vector_pop_front(vector*);
 int vector_pop_back(vector*);
 void vector_insert(vector*, int, int);
 void vector_remove(vector*, int);
+int vector_search(const vector*, int);
+
 //def
 struct vector {
 	int size, capacity;
@@ -38,8 +40,9 @@ struct vector {
 	int (*pop_back)(vector *self);
 	void (*insert)(vector *self, int index, int value);
 	void (*remove)(vector *self, int index);
+	int (*search)(const vector *self, int value);
 };
-//test
+
 //API def
 vector *new_vector(){
 	vector *v = (vector*)malloc(sizeof(vector));
@@ -60,6 +63,7 @@ vector *new_vector(){
 	v->pop_back = vector_pop_back;
 	v->insert = vector_insert;
 	v->remove = vector_remove;
+	v->search = vector_search;
 	return v;
 }
 
@@ -208,9 +212,7 @@ void vector_insert(vector *self, int index, int value){
 				}
 			}
 			else if (self->head <= new_index) {
-				if (i <= self->tail || i >= new_index) {
-					self->array[(i + 1) % self->capacity] = self->array[i];
-				}
+				if (i <= self->tail || i >= new_index) self->array[(i + 1) % self->capacity] = self->array[i];
 				if (i == new_index) {
 					self->array[i] = value;
 					break;
@@ -273,13 +275,28 @@ void vector_remove(vector *self, int index){
 			if (new_index <= self->tail) {
 				if (new_index <= i && i <= self->tail) self->array[i] = self->array[(i + 1) % self->capacity];
 			}
-			else {
-				if (i <= self->tail || new_index <= i) self->array[i] = self->array[(i + 1) % self->capacity];
-			}
+			else if (i <= self->tail || new_index <= i) self->array[i] = self->array[(i + 1) % self->capacity];
 		}
 		i = (i + 1) % self->capacity;
 		s++;
 	}
 	self->tail = !self->tail ? self->capacity - 1 : self->tail - 1;
 	self->size--;
+}
+
+int vector_search(const vector *self, int value){
+	if (self->head <= self->tail) {
+		for (int i = self->head; i < self->tail; i++)
+			if (self->array[i] == value) return i - self->head;
+	}
+	else{
+		int index = 0;
+		for (int i = self->head; i < self->tail + self->capacity; i++) {
+			i %= self->capacity;
+			if (self->array[i] == value) return index;
+			index++;
+		}
+	}
+	printf("no in vector. error code: ");
+	return -3;
 }

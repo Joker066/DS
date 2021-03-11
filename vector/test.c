@@ -1,15 +1,13 @@
 #include "vector.c"
 int main(){
     vector *v = new_vector();
-    v->push_back(v, 1);
-    v->push_front(v, 3);
+    for(int i = 0; i < 20; i++)
+        v->push_back(v, i);
     v->print(v);
-    printf("%d\n", v->peek_back(v));
-    printf("%d\n", v->pop_front(v));
+    v->insert(v, 5, 20);
     v->print(v);
-    printf("%d\n", v->peek_back(v));
-    printf("%d\b", v->length(v));
-    v->insert(v, 1, 2);
+    printf("%d\n", v->search(v, 20));
+    v->remove(v, 5);
     v->print(v);
     return 0;
 }
