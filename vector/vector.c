@@ -2,7 +2,6 @@
 #include <stdio.h>
 
 typedef struct vector vector;
-//test
 //API prototype
 vector *new_vector();
 void vector_dispose(vector*);
