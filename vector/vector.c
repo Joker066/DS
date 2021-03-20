@@ -297,6 +297,6 @@ int vector_search(const vector *self, int value){
 			index++;
 		}
 	}
-	printf("no in vector. error code: ");
+	printf("not in vector. error code: ");
 	return -3;
 }
