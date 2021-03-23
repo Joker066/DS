@@ -25,6 +25,7 @@ int llist_pop_front(linkedlist *);
 void llist_insert(linkedlist *, int, int);
 void llist_delete_index(linkedlist *, int);
 void llist_delete_v(linkedlist *, int);
+void llist_conact(linkedlist *, linkedlist *);
 void llist_print(linkedlist *);
 
 struct linkedlist {
@@ -40,6 +41,7 @@ struct linkedlist {
 	void (*insert)(linkedlist *self, int index, int v);
 	void (*delete_index)(linkedlist *self, int index);
 	void (*delete_v)(linkedlist *self, int v);
+	void (*conact)(linkedlist *self, linkedlist *other);
 	void (*print)(linkedlist *self);
 };
 
@@ -58,6 +60,7 @@ linkedlist *llist_new() {
 	llist->insert = llist_insert;
 	llist->delete_index = llist_delete_index;
 	llist->delete_v = llist_delete_v;
+	llist->conact = llist_conact;
 	llist->print = llist_print;
 	return llist;
 }
@@ -221,6 +224,13 @@ void llist_delete_v(linkedlist *self, int v) {
 		}
 		cur = cur->next;
 	}
+}
+
+void llist_conact(linkedlist *self, linkedlist *other) {
+	self->tail->next = other->head;
+	other->head->prev = self->tail;
+	self->tail = other->tail;
+	self->size += other->size;
 }
 
 void llist_print(linkedlist *self) {
